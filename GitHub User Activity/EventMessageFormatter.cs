@@ -18,12 +18,12 @@
 
         public static string GetMessageFormatted(EventMessageData eMessageData)
         {
-            if (Events.TryGetValue(eMessageData.TypeEvent, out var formatter))
-            {
-                return formatter(eMessageData);
-            }
+            bool existKey = Events.TryGetValue(eMessageData.TypeEvent, out var formatter);
+            
+            if (!existKey || formatter == null)
+                throw new ArgumentException($"Event type '{eMessageData.TypeEvent}' is not supported.");
 
-            return "Event doesn't exist";
+            return formatter(eMessageData);
         }
 
         static public string FormatPushEvent(
@@ -40,10 +40,11 @@
             string repoName
         )
         {
-            var messageFragment = "";
-
-            if (actionName.ToLower() == "created")
-                messageFragment = "new ";
+            var isCreated = actionName.Equals("created", 
+                                        StringComparison.CurrentCultureIgnoreCase
+                                        );
+            
+             var messageFragment = isCreated ? "new " : "";
 
             actionName = Utils.CapitalizeFirstLetter(actionName);
             typeActionName = typeActionName.ToLower();

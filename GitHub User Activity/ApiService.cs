@@ -3,10 +3,11 @@
     public static class ApiService
     {
     
-        public static async Task GetUserActivity()
+        public static async Task<List<string>> GetUserActivity(string username = "kamranahmedse")
         {
+            List<string> activity = [];
 
-            var contenJson = await UserRepository.GetUserActivity();
+            var contenJson = await UserRepository.GetUserActivity(username);
            
             foreach (var item in contenJson)
             {
@@ -25,12 +26,16 @@
 
                 var message = EventMessageFormatter.GetMessageFormatted(eMessageData);
 
-                Console.WriteLine(message);
+                activity.Add(message);
             }
-
             
-
+            return activity;
         }
         
+        public static void ShowActivity(IEnumerable<String> activity)
+        {
+            foreach (var item in activity)
+                Console.WriteLine(item);
+        }
     }
 }

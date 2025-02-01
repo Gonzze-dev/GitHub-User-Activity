@@ -10,7 +10,7 @@ namespace GitHub_User_Activity
         static string Url (string username) => 
             $"https://api.github.com/users/{username}/events";
 
-        public static async Task<JsonElement.ArrayEnumerator> GetUserActivity(string username = "kamranahmedse")
+        public static async Task<JsonElement.ArrayEnumerator> GetUserActivity(string username)
         {
             var url = Url(username);
             
