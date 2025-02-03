@@ -5,15 +5,15 @@
 
         private static readonly Dictionary<string, Func<EventData, string>> Events = new()
         {
-            {"PushEvent", e => FormatPushEvent("Pushed", e.RepoName, e.Commits)},
-            {"PullRequestEvent", e => FormatEventWithAction(e.ActionName, "pull", e.RepoName)},
-            {"IssuesEvent", e => FormatEventWithAction(e.ActionName, "issue", e.RepoName)},
-            {"IssueCommentEvent", e => FormatEventWithAction(e.ActionName, "issue comment", e.RepoName)},
-            {"ForkEvent", e => FormatDefaultEvent("Forked", e.RepoName)},
-            {"WatchEvent", e => FormatDefaultEvent("Watched", e.RepoName)},
-            {"CreateEvent", e => FormatDefaultEvent("Created", e.RepoName)},
-            {"DeleteEvent", e => FormatDefaultEvent("Deleted", e.RepoName)},
-            {"ReleaseEvent", e => FormatDefaultEvent("Released", e.RepoName)},
+            {"PushEvent", e => FormatEvent("Pushed", e.RepoName, e.Commits)},
+            {"PullRequestEvent", e => FormatEvent(e.ActionName, "pull", e.RepoName)},
+            {"IssuesEvent", e => FormatEvent(e.ActionName, "issue", e.RepoName)},
+            {"IssueCommentEvent", e => FormatEvent(e.ActionName, "issue comment", e.RepoName)},
+            {"ForkEvent", e => FormatEvent("Forked", e.RepoName)},
+            {"WatchEvent", e => FormatEvent("Watched", e.RepoName)},
+            {"CreateEvent", e => FormatEvent("Created", e.RepoName)},
+            {"DeleteEvent", e => FormatEvent("Deleted", e.RepoName)},
+            {"ReleaseEvent", e => FormatEvent("Released", e.RepoName)},
         };
 
         public static string GetMessageFormatted(EventData eMessageData)
@@ -26,7 +26,7 @@
             return formatter(eMessageData);
         }
 
-        static public string FormatPushEvent(
+        static public string FormatEvent(
             string typeEventName, 
             string repoName, 
             int commits
@@ -34,7 +34,7 @@
             $"{typeEventName} {commits} in {repoName}";
         
 
-        static public string FormatEventWithAction(
+        static public string FormatEvent(
             string actionName, 
             string typeActionName,
             string repoName
@@ -44,19 +44,30 @@
                                         StringComparison.CurrentCultureIgnoreCase
                                         );
             
-             var messageFragment = isCreated ? "new " : "";
+             var messageFragment = isCreated ? " a new " : " ";
 
             actionName = Utils.CapitalizeFirstLetter(actionName);
             typeActionName = typeActionName.ToLower();
 
-            return $"{actionName} a {messageFragment}{typeActionName} in {repoName}";
+            return $"{actionName}{messageFragment}{typeActionName} in {repoName}";
         }
 
-        static public string FormatDefaultEvent(
+        static public string FormatEvent(
             string typeEventName,
             string repoName
-        ) =>
-         $"{typeEventName} in {repoName}";
+        ) 
+        {
+            var isCreated = typeEventName.Equals("created",
+                                        StringComparison.CurrentCultureIgnoreCase
+                                        );
+
+            var messageFragment = isCreated ? "new respository" : "in";
+
+         
+
+
+            return $"{typeEventName} {messageFragment} {repoName}";
+        }
 
 
 
