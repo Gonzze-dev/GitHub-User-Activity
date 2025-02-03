@@ -3,7 +3,7 @@
     public static class EventMessageFormatter
     {
 
-        private static readonly Dictionary<string, Func<EventMessageData, string>> Events = new()
+        private static readonly Dictionary<string, Func<EventData, string>> Events = new()
         {
             {"PushEvent", e => FormatPushEvent("Pushed", e.RepoName, e.Commits)},
             {"PullRequestEvent", e => FormatEventWithAction(e.ActionName, "pull", e.RepoName)},
@@ -16,7 +16,7 @@
             {"ReleaseEvent", e => FormatDefaultEvent("Released", e.RepoName)},
         };
 
-        public static string GetMessageFormatted(EventMessageData eMessageData)
+        public static string GetMessageFormatted(EventData eMessageData)
         {
             bool existKey = Events.TryGetValue(eMessageData.TypeEvent, out var formatter);
             

@@ -1,6 +1,6 @@
 ﻿namespace GitHub_User_Activity
 {
-    public class EventMessageData
+    public class EventData
     {
         public string TypeEvent { get; set; }
         public string ActionName { get; set; }

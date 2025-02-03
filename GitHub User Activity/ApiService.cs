@@ -16,7 +16,7 @@
 
                 var resultActionName = payload.TryGetProperty("action", out var actionName);
                 
-                EventMessageData eMessageData = new()
+                EventData eMessageData = new()
                 {
                     TypeEvent = item.GetProperty("type").ToString(),
                     ActionName = resultActionName ? actionName.ToString() : "",
